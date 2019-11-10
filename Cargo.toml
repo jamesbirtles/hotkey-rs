@@ -1,6 +1,6 @@
 [package]
 name = "hotkey"
-version = "0.1.0"
+version = "0.2.0"
 license = "MIT"
 description = "Register global hotkeys"
 documentation = "https://docs.rs/hotkey"
