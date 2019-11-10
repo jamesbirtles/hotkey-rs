@@ -14,3 +14,6 @@ edition = "2018"
 
 [target.'cfg(windows)'.dependencies]
 winapi = { version = "0.3.8", features = ["winuser"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+x11-dl = "2.18.1"

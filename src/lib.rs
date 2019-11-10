@@ -1,9 +1,14 @@
 #[cfg(windows)]
 mod windows;
 
+#[cfg(target_os = "linux")]
+mod linux;
+
 use std::collections::HashMap;
 use std::time::Duration;
 
+#[cfg(target_os = "linux")]
+use linux::{poll_keys, register_hotkey};
 #[cfg(windows)]
 use windows::{poll_keys, register_hotkey};
 
