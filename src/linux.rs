@@ -12,6 +12,27 @@ pub mod modifiers {
     pub const SUPER: u32 = xlib::Mod4Mask;
 }
 
+pub mod keys {
+    use x11_dl::keysym;
+    pub const BACKSPACE: u32 = keysym::XK_BackSpace;
+    pub const TAB: u32 = keysym::XK_Tab;
+    pub const ENTER: u32 = keysym::XK_Return;
+    pub const CAPS_LOCK: u32 = keysym::XK_Caps_Lock;
+    pub const ESCAPE: u32 = keysym::XK_Escape;
+    pub const SPACEBAR: u32 = keysym::XK_space;
+    pub const PAGE_UP: u32 = keysym::XK_Page_Up;
+    pub const PAGE_DOWN: u32 = keysym::XK_Page_Down;
+    pub const END: u32 = keysym::XK_End;
+    pub const HOME: u32 = keysym::XK_Home;
+    pub const ARROW_LEFT: u32 = keysym::XK_Left;
+    pub const ARROW_RIGHT: u32 = keysym::XK_Right;
+    pub const ARROW_UP: u32 = keysym::XK_Up;
+    pub const ARROW_DOWN: u32 = keysym::XK_Down;
+    pub const PRINT_SCREEN: u32 = keysym::XK_Print;
+    pub const INSERT: u32 = keysym::XK_Insert;
+    pub const DELETE: u32 = keysym::XK_Delete;
+}
+
 pub type ListenerID = (i32, u32);
 
 pub struct Listener {
