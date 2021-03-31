@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, ptr::null_mut};
 use std::mem;
 use winapi::shared::windef::HWND;
 use winapi::um::winuser;
@@ -13,23 +13,23 @@ pub mod modifiers {
 
 pub mod keys {
     use winapi::um::winuser;
-    pub const BACKSPACE: u32 = winuser::VK_BACK;
-    pub const TAB: u32 = winuser::VK_TAB;
-    pub const ENTER: u32 = winuser::VK_RETURN;
-    pub const CAPS_LOCK: u32 = winuser::VK_CAPITAL;
-    pub const ESCAPE: u32 = winuser::VK_ESCAPE;
-    pub const SPACEBAR: u32 = winuser::VK_SPACE;
-    pub const PAGE_UP: u32 = winuser::VK_PRIOR;
-    pub const PAGE_DOWN: u32 = winuser::VK_NEXT;
-    pub const END: u32 = winuser::VK_END;
-    pub const HOME: u32 = winuser::VK_HOME;
-    pub const ARROW_LEFT: u32 = winuser::VK_LEFT;
-    pub const ARROW_RIGHT: u32 = winuser::VK_RIGHT;
-    pub const ARROW_UP: u32 = winuser::VK_UP;
-    pub const ARROW_DOWN: u32 = winuser::VK_DOWN;
-    pub const PRINT_SCREEN: u32 = winuser::VK_SNAPSHOT;
-    pub const INSERT: u32 = winuser::VK_INSERT;
-    pub const DELETE: u32 = winuser::VK_DELETE;
+    pub const BACKSPACE: i32 = winuser::VK_BACK;
+    pub const TAB: i32 = winuser::VK_TAB;
+    pub const ENTER: i32 = winuser::VK_RETURN;
+    pub const CAPS_LOCK: i32 = winuser::VK_CAPITAL;
+    pub const ESCAPE: i32 = winuser::VK_ESCAPE;
+    pub const SPACEBAR: i32 = winuser::VK_SPACE;
+    pub const PAGE_UP: i32 = winuser::VK_PRIOR;
+    pub const PAGE_DOWN: i32 = winuser::VK_NEXT;
+    pub const END: i32 = winuser::VK_END;
+    pub const HOME: i32 = winuser::VK_HOME;
+    pub const ARROW_LEFT: i32 = winuser::VK_LEFT;
+    pub const ARROW_RIGHT: i32 = winuser::VK_RIGHT;
+    pub const ARROW_UP: i32 = winuser::VK_UP;
+    pub const ARROW_DOWN: i32 = winuser::VK_DOWN;
+    pub const PRINT_SCREEN: i32 = winuser::VK_SNAPSHOT;
+    pub const INSERT: i32 = winuser::VK_INSERT;
+    pub const DELETE: i32 = winuser::VK_DELETE;
 }
 
 pub type ListenerID = i32;
@@ -68,14 +68,16 @@ impl Listener {
 
     pub fn listen(self) {
         unsafe {
+            let mut msg = mem::MaybeUninit::uninit().assume_init();
             loop {
-                let mut msg = mem::MaybeUninit::uninit().assume_init();
-                while winuser::GetMessageW(&mut msg, 0 as HWND, 0, 0) > 0 {
-                    if msg.wParam != 0 {
+                match winuser::GetMessageW(&mut msg, null_mut(), 0, 0) {
+                    0 => break,
+                    ret if msg.wParam != 0 && ret != -1 => {
                         if let Some(handler) = self.handlers.get(&(msg.wParam as i32)) {
                             handler();
                         }
                     }
+                    _ => {}
                 }
             }
         }
