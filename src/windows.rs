@@ -66,6 +66,19 @@ impl Listener {
         }
     }
 
+    /// Sends [`WM_QUIT`](winapi::um::winuser::WM_QUIT) siqnal to interupt [`listen`](#listen) infinite loop.
+    pub fn post_quit_message() {
+        unsafe { winuser::PostQuitMessage(0) }
+    }
+
+    /// Runs blocking infinite loop to listen for events.
+    ///
+    /// *Note:* callbacks are beeing called from current thread in "blocking" fashion. Make sure you aren't blocking
+    /// main thread for ever if you want to dispatch hotkey presses.
+    ///
+    /// You can execute [`PostQuitMessage`](winapi::um::winuser::PostQuitMessage) or call
+    /// [`Listener::post_quit_message`](#post_quit_message)
+    /// to interupt this loop.
     pub fn listen(self) {
         unsafe {
             let mut msg = mem::MaybeUninit::uninit().assume_init();
